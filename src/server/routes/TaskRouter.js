@@ -5,6 +5,7 @@ import { uploadFile } from "./UploadFile.js"
 import { updateConfigTimes} from "../models/tasks/updateConfigs.js"
 import path from 'path';
 import fs from 'fs';
+import { CommonProps } from 'element-plus';
 
 
 const router = express.Router();
@@ -85,6 +86,32 @@ router.post('/update_times', async (req, res) => {
     await updateConfigTimes("view_times")
     const data = await dbManager.selectByNames("configs", ["view_times", "usage_times"])
     res.status(201).json({ success: true, data: data});
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// uuid 为前端传入
+router.post('/create_custom_db', authenticate, async (req, res) => {
+  try {
+    const user = req.user
+    const params = req.body
+    params.user_id = user.id
+    await dbManager.insert("custom_databases", params)
+    res.status(201).json({ success: true, uuid: req.body.uuid });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get('/custom_dbs', authenticate, async (req, res) => {
+  try {
+    const user = req.user
+    let conditions = req.query.conditions || {}
+    conditions.user_id = user.id
+    const db_names = await dbManager.selectAll("custom_databases", conditions, {columns: ["name"]})
+    const datas = db_names.map(k => k.name)
+    res.status(201).json({ success: true, data: datas });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

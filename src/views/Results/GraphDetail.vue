@@ -16,9 +16,25 @@
         />
       </el-select>
     </div>
+    <div class="mb-8">
+      <el-space class="w-full">
+        <el-button size="large" @click="toggleEdgeLabels">{{ $t("graph.a3") }}</el-button>
+        <el-alert show-icon class="ml-4" :closable="false" type="info" :title="$t('graph.a4')"></el-alert>
+      </el-space>
+     
+    </div>
     <div class="graph-container">
       <div id="cy" ref="cyRef" style="width: 100%; height: 400px"></div>
     </div>
+
+    <!-- 编辑节点/连线颜色的弹窗 -->
+    <el-dialog v-model="state.editDialogVisible" :title="$t('graph.a0')" :width="200">
+      <el-form>
+        <el-form-item label="Color">
+          <el-color-picker v-model="state.editColor" show-alpha size="large" @change="applyColorEdit" />
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -44,6 +60,10 @@ const state = reactive({
   loading: false,
   graphFile: "",
   showGraph: false,
+  editDialogVisible: false, // 控制编辑弹窗显示
+  editColor: "#ffffff", // 当前选择的颜色
+  editTarget: null, // 当前编辑的节点或连线
+  areEdgeLabelsVisible: false, // 连线标签是否显示
 });
 
 onBeforeMount(() => {
@@ -92,7 +112,7 @@ const initGraph = async (content) => {
   try {
     const elements = parseGraphML(content);
     if (!cyRef.value) {
-      throw new Error("Container element not found");
+      throw new Error(proxy.$t("graph.a1"));
     }
     cy = cytoscape({
       container: cyRef.value,
@@ -124,7 +144,7 @@ const initGraph = async (content) => {
             "curve-style": "bezier",
             "target-arrow-shape": "triangle",
             "arrow-scale": 0.8,
-            label: (ele) => ele.data("d8"),
+            label: (ele) => (state.areEdgeLabelsVisible ? ele.data("d8") : ""), // 根据状态显示/隐藏标签
             "font-size": "6px",
             "text-rotation": "autorotate",
             "text-margin-y": "-10px",
@@ -157,24 +177,62 @@ const initGraph = async (content) => {
       },
     });
 
-    // 添加交互
-    cy.on("tap", "node", function (evt) {
-      const node = evt.target;
+    // 右键点击节点或连线时打开颜色编辑弹窗
+    cy.on("cxttap", "node", function (evt) {
+      openEditDialog(evt.target, "node");
     });
 
-    cy.on("mouseover", "node", function (evt) {
-      evt.target.style("border-width", "2px");
-      evt.target.style("border-color", "#ff6b6b"); // 鼠标悬停时边框颜色改为亮色
-    });
-
-    cy.on("mouseout", "node", function (evt) {
-      evt.target.style("border-width", "1px");
-      evt.target.style("border-color", "#ffffff"); // 恢复边框颜色
+    cy.on("cxttap", "edge", function (evt) {
+      openEditDialog(evt.target, "edge");
     });
   } catch (error) {
     console.log(error);
     proxy.$elmsg.error(error);
   }
+};
+
+// 打开编辑弹窗
+const openEditDialog = (target, type) => {
+  state.editTarget = target;
+  state.editColor =
+    type === "node"
+      ? target.style("background-color")
+      : target.style("line-color");
+  state.editDialogVisible = true;
+};
+
+// 应用颜色修改
+const applyColorEdit = (val) => {
+  if (state.editTarget) {
+    if (state.editTarget.group() === "nodes") {
+      state.editTarget.style("background-color", val); // 修改节点颜色
+    } else {
+      state.editTarget.style("line-color", val); // 修改连线颜色
+      state.editTarget.style("target-arrow-color", val); // 修改箭头颜色
+
+    }
+    state.editDialogVisible = false;
+  }
+};
+
+// 切换连线标签的显示/隐藏
+const toggleEdgeLabels = () => {
+  if (!cy) {
+    proxy.$elmsg.error(proxy.$t("graph.a2"))
+    return;
+  }
+
+  const edges = cy.edges();
+  if (edges.length === 0) {
+    return;
+  }
+
+  state.areEdgeLabelsVisible = !state.areEdgeLabelsVisible;
+  edges.forEach((edge) => {
+    edge.style("label", state.areEdgeLabelsVisible ? edge.data("d8") : "");
+  });
+
+  cy.style().update(); // 强制刷新样式
 };
 
 const parseGraphML = (content) => {

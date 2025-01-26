@@ -68,3 +68,20 @@ export function downloadZipResult(data) {
     data
   })
 }
+
+
+export function getCustomDbs(data) {
+  return requestReq({
+    url: '/api/custom_dbs',
+    method: 'get',
+    data
+  })
+}
+
+export function createCustomDb(data) {
+  return requestReq({
+    url: '/api/create_custom_db',
+    method: 'post',
+    data
+  })
+}

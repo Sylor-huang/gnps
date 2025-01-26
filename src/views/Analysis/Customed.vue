@@ -62,7 +62,7 @@
           </el-col>
           <el-col :xs="{span: 24}" :md="{span: 18}" v-if="state.uuid && state.uuid.length > 0">
             <el-form-item>
-              <el-alert :title="$t('info.a13', {uuid: state.uuid})" type="success" :closable="false"/>
+              <el-alert :title="$t('info.a15', {uuid: state.uuid})" type="success" :closable="false"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,7 +73,7 @@
 <script setup>
 import {getCurrentInstance, ref, reactive} from "vue";
 import Uploads from "./Uploads";
-import {createTask, uploadFiles} from "@/api/tasks.js";
+import {createCustomDb, uploadFiles} from "@/api/tasks.js";
 import {v4 as uuidv4} from "uuid";
 let {proxy} = getCurrentInstance();
 
@@ -115,12 +115,11 @@ let startInitTask = async () => {
     const res = await uploadFiles(formData);
     if (res.success) {
       const params = {
-        database_name: state.database_name,
         upload_files: res.files,
       };
-      const cres = await createTask({
+      const cres = await createCustomDb({
         uuid: uuid,
-        workflow: "Customed Database",
+        name: state.database_name,
         params: JSON.stringify(params),
       });
       if (cres.success) {

@@ -37,6 +37,21 @@ export function configsSql(dbManager) {
   ]);
 }
 
+export function customDatabaseSql(dbManager) {
+  dbManager.createTable('custom_databases', [
+    { name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
+    { name: 'user_id', type: 'INTEGER NOT NULL' },
+    { name: 'name', type: 'VARCHAR(255) NOT NULL' },
+    { name: 'uuid', type: 'VARCHAR(255) NOT NULL' },
+    { name: 'params', type: 'VARCHAR(255)' },
+    { name: 'updated_at', type: 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP' },
+  ], [
+    { columns: ['name'], unique: true},
+    { columns: ['uuid']},
+    { columns: ['user_id', 'uuid'], unique: true},
+  ]);
+}
+
 export async function tasksSql(dbManager) {
   dbManager.createTable('tasks', [
     { name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },

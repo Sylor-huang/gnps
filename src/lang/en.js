@@ -55,7 +55,8 @@ export default {
     someError: "There are some unknown errors",
     InvalidRecord: "Invalid Record",
     emptyFiles: "No files uploaded",
-    noFile: "No file"
+    noFile: "No file",
+    UNIQUE: "Must Be Unique."
   },
   info: {
     "a1": "Welcome to MS Analyst",
@@ -71,7 +72,9 @@ export default {
     "a11": "Usage Times",
     "a12": "Views Times",
     "a13": "Create Task Success. You can check result with id: {uuid}",
-    "a14": "You can select one from 'Mass File' OR 'Mass spectrum data' to input."
+    "a14": "You can select one from 'Mass File' OR 'Mass spectrum data' to input.",
+    "a15": "Create Custom DB success. UUID: {uuid}",
+    "a16": "Get Custom Database error."
   },
   about: {
     "a0": "About us",
@@ -130,6 +133,13 @@ export default {
     "NetworkView": "Network visualization",
     "Download": "Download Result",
     "DSuccess": "Download Success"
+  },
+  graph: {
+    "a0": "Edit Color",
+    "a1": "Container element not found",
+    "a2": "Cytoscape instance is not initialized.",
+    "a3": "Toggle Edge Labels",
+    "a4": "Right click can change the color"
   }
   
 }
