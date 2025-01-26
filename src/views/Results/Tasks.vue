@@ -143,7 +143,6 @@ const state = reactive({
     "Molecular Networking",
     "Reanalysis",
     "Spectrum Searching",
-    "Customed Database",
   ],
   batchIds: [],
   q: "",
