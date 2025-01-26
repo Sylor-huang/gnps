@@ -26,6 +26,17 @@ export function emailCodesSql(dbManager) {
   ]);
 }
 
+export function configsSql(dbManager) {
+  dbManager.createTable('configs', [
+    { name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },
+    { name: 'name', type: 'VARCHAR(255) NOT NULL' },
+    { name: 'val', type: 'VARCHAR(255) NOT NULL' },
+    { name: 'updated_at', type: 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP' },
+  ], [
+    { columns: ['name'], unique: true},
+  ]);
+}
+
 export async function tasksSql(dbManager) {
   dbManager.createTable('tasks', [
     { name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT' },

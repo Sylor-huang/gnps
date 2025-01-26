@@ -85,6 +85,24 @@ class DatabaseManager {
     return stmt.all(...values);
   }
 
+  async selectByNames(tableName, names, options = {}) {
+    if (!names || names.length === 0) {
+      return [];
+    }
+
+    const placeholders = names.map(() => '?').join(',');
+    const whereClause = `name IN (${placeholders})`;
+    const values = names.map(name => String(name));
+
+    let sql = `SELECT ${options.columns || '*'} FROM ${tableName} WHERE ${whereClause}`;
+    if (options.orderBy) {
+      sql += ` ORDER BY ${options.orderBy} ${options.orderType || 'asc'}`;
+    }
+
+    const stmt = this.db.prepare(sql);
+    return stmt.all(...values);
+  }
+
   // 查询所有数据
   async selectAll(tableName, conditions = {}, options = {}) {
     const { whereClause, values } = this._buildWhereClause(conditions);

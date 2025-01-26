@@ -12,13 +12,13 @@
       <el-row class="bg-white/5 backdrop-blur-xl rounded-2xl p-8 mb-8">
         <el-col :span="12">
           <div class="text-center">
-            <div class="text-3xl font-bold text-purple-400">10K+</div>
+            <div class="text-3xl font-bold text-purple-400">{{ state.usage_times }}</div>
             <div class="text-gray-400">{{ $t("info.a11") }}</div>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text-center">
-            <div class="text-3xl font-bold text-purple-400">30392</div>
+            <div class="text-3xl font-bold text-purple-400">{{ state.view_times }}</div>
             <div class="text-gray-400">{{ $t("info.a12") }}</div>
           </div>
         </el-col>
@@ -79,5 +79,28 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref,getCurrentInstance, reactive, onMounted} from "vue";
+import { updateTimes } from "@/api/user.js"
+let {proxy} = getCurrentInstance();
+
+onMounted(() => {
+  updateUsedTimes()
+})
+
+const state = reactive({
+  view_times: 0,
+  usage_times: 0
+})
+
+let updateUsedTimes = async() => {
+  const res = await updateTimes()
+  if(res.data) {
+    const view_res = res.data.find(k => k.name == 'view_times')
+    const usage_res = res.data.find(k => k.name == 'usage_times')
+    state.view_times = view_res?.val || 0
+    state.usage_times = usage_res?.val || 0
+  }
+}
+
+
 </script>

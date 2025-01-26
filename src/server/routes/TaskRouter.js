@@ -2,6 +2,7 @@ import express from 'express';
 import { authenticate } from './authMiddleware.js';
 import dbManager from '../database/db_manager.js';
 import { uploadFile } from "./UploadFile.js"
+import { updateConfigTimes} from "../models/tasks/updateConfigs.js"
 import path from 'path';
 import fs from 'fs';
 
@@ -50,6 +51,7 @@ router.post('/create_task', authenticate, async (req, res) => {
     params.status = 'Process'
     params.user_id = user.id
     await dbManager.insert("tasks", params)
+    await updateConfigTimes("usage_times")
     res.status(201).json({ success: true, uuid: req.body.uuid });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -73,6 +75,16 @@ router.post('/delete_task', authenticate, async (req, res) => {
     await dbManager.delete("tasks", { user_id: user.id, uuid: req.body.uuid })
 
     res.status(201).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post('/update_times', async (req, res) => {
+  try {
+    await updateConfigTimes("view_times")
+    const data = await dbManager.selectByNames("configs", ["view_times", "usage_times"])
+    res.status(201).json({ success: true, data: data});
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

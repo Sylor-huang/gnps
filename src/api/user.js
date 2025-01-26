@@ -55,3 +55,10 @@ export function updateUserPasswd(data) {
     data
   })
 }
+
+export function updateTimes() {
+  return requestReq({
+    url: '/api/update_times',
+    method: 'post'
+  })
+}
