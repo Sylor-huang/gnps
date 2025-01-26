@@ -1,0 +1,156 @@
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+body {
+  width: 100% !important;
+}
+
+.fullscreen-height {
+  height: 100vh;
+}
+
+a:hover {
+  color: #9945FF;
+}
+
+.text-primary {
+  color: #9945FF;
+}
+
+.text-success {
+  color: #14f195;
+}
+.logo-title {
+  font-size: 28px;
+  font-weight: 600;
+  background-image: linear-gradient(to right, #9945ff, #14f195);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ht-75 {
+  height: 75px;
+}
+.mat-75 {
+  margin-top: 75px;
+}
+.black-bg-color {
+  background-color: rgba(18, 18, 18, 0.95);
+}
+.black-gradient-bg-color {
+  background-image: radial-gradient(
+      farthest-side at bottom left,
+      #271d3b,
+      transparent 900px
+    ),
+    radial-gradient(
+      farthest-corner at bottom right,
+      #3a233f,
+      transparent 1000px
+    );
+}
+.sidebar {
+  .border-b-0 {
+    border-width: 0 !important;
+  }
+}
+.flex-auto-size {
+  flex: 0 0 auto;
+}
+.gradient-text {
+  background: linear-gradient(to right, #9945ff, #14f195);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #9945ff;
+}
+.border-l-3 {
+  border-left-width: 3px;
+}
+.border-l-c-1 {
+  border-color: #9945ff;
+}
+.border-l-c-2 {
+  border-color: #eda908;
+}
+.border-l-c-3 {
+  border-color: #31f214;
+}
+.border-l-c-4 {
+  border-color: #ef0a3c;
+}
+.scroll-x {
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+.bet-input {
+  padding: 2px !important;
+  .el-input__wrapper {
+    padding: 3px !important;
+    border-radius: 50% !important;
+    input {
+      text-align: center;
+    }
+  }
+}
+.betBigButton {
+  padding: 24px 38px;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 24px;
+  background: linear-gradient(to right, #9945ff, #14f195);
+}
+
+.el-sub-menu .el-sub-menu__title {
+  border-bottom: 0 !important;
+}
+
+.el-menu--popup {
+  min-width: 150px !important;
+}
+.purge-black-bg{
+  background-color: #151221;
+}
+
+.green-black-bg{
+  background-color: #101a18;
+}
+.border-color-1{
+  border: 1px solid #414243;
+  border-radius: 4px;
+}
+.info-li {
+  margin-left: 12px;
+  list-style-type: decimal;
+}
+
+#nprogress .bar {
+  background: #9945ff !important; /* 红色，你可以改成任何颜色 */
+}
+
+/* 如果你也想修改加载圈的颜色 */
+#nprogress .spinner-icon {
+  border-top-color: #9945ff;
+  border-left-color: #9945ff;
+}
+
+/* 如果你使用了 peg 效果（进度条末端的淡出效果） */
+#nprogress .peg {
+  box-shadow: 0 0 10px #9945ff, 0 0 5px #9945ff;
+}
